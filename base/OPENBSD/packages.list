@@ -1,6 +1,0 @@
-#
-# packages.list for OPENBSD and all TYPEs
-#
-# One package per line
-nano
-git

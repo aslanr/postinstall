@@ -1,8 +1,0 @@
-#
-# packages.list for DEBIAN and TYPE=workstation
-#
-# One package per line
-imagemagick
-jhead
-vlc
-spotify-client

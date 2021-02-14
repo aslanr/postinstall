@@ -2,7 +2,6 @@
 # after.sh for all OPERATING_SYSTEMs and TYPEs
 #
 
-
 #
 # User Configuration
 #
@@ -13,24 +12,12 @@
 echo_step "  Creating private SSH key"
 echo_step_info "~$MY_USERNAME/.ssh/id_rsa"
 {
-	echo -e "\n test dir /Users/$MY_USERNAME"
-	echo -e "\n test dir /data/data/com.termux/files/home"
-	echo -e "\n test dir /boot/home"
 	echo -e "\n test dir /home/$MY_USERNAME"
 	echo -e "\n test file ~$MY_USERNAME/.ssh/id_rsa"
 	echo -e "\n test dir ~$MY_USERNAME"
 } >>"$INSTALL_LOG"
-# macOS
-if [ -d "/Users/$MY_USERNAME" ]; then	
-	export HOMEDIR="/Users/$MY_USERNAME"
-# Termux
-elif [ -d "/data/data/com.termux/files/home" ]; then
-	export HOMEDIR="/data/data/com.termux/files/home"
-# Haiku
-elif [ "$OPERATING_SYSTEM" = "HAIKU" ]; then
-	export HOMEDIR="/boot/home"
 # *nix
-else
+if
 	export HOMEDIR="/home/$MY_USERNAME"
 fi
 if [ -f "$HOMEDIR/.ssh/id_rsa" ]; then

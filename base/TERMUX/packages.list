@@ -1,7 +1,0 @@
-#
-# packages.list for TERMUX and all TYPEs
-#
-# One package per line
-nano
-screen
-openssh

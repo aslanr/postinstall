@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
 # postinstall.sh Test Script
-#
-# https://github.com/lehmannro/assert.sh
 
 source assert.sh
 

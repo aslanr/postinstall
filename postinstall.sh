@@ -1,22 +1,17 @@
 #!/bin/bash
 
 # postinstall.sh
-# Author: Nils Knieling - https://github.com/Cyclenerd/postinstall
-# Inspired by: Wavefront - https://github.com/wavefrontHQ/install
 
-# Bash Script to automate post-installation steps. Helps to
-#  install packages
-#  on different operating systems.
+# Bash Script to automate post-installation steps. 
 
 ################################################################################
 #### Configuration Section
 ################################################################################
 
 # Where is the default base url or dir. Without / at the end
-# Filesystem directory: BASE="/Users/nils/Scripts/postinstall/base"
-# Web: BASE="https://raw.githubusercontent.com/Cyclenerd/postinstall/master/base"
+# Filesystem directory: BASE="/root/install/base"
 # Can be overwritten with -b <BASE> at runtime
-BASE="https://raw.githubusercontent.com/Cyclenerd/postinstall/master/base"
+BASE="/root/install/base"
 
 # Default type of installation
 # Can be overwritten with -t <TYPE> at runtime

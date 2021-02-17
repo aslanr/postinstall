@@ -194,9 +194,8 @@ function detect_hostname_fqdn() {
 	export HOSTNAME_FQDN
 }
 
-# check_if_root_or_die() verifies if the script is being run as root and exits
-# otherwise (i.e. die).
-function check_if_root_or_die() {
+# check_root_privilage() verifies if the script is being run as root and exits
+function check_root_privilage() {
 	echo_step "Checking installation privileges"
 	echo -e "\nid -u" >>"$INSTALL_LOG"
 	SCRIPT_UID=$(id -u)
@@ -445,7 +444,7 @@ set_packages_list
 detect_hostname_fqdn
 detect_operating_system
 detect_architecture
-check_if_root_or_die
+check_root_privilage
 
 echo_step "Preparing to Install"; echo
 

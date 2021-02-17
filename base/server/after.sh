@@ -39,7 +39,6 @@ if [ -d "$SSHD_KEY_DIR" ]; then
 	done
 fi
 
-
 #
 # SSH Daemon Configuration
 #

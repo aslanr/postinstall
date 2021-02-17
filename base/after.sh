@@ -17,9 +17,7 @@ echo_step_info "~$MY_USERNAME/.ssh/id_rsa"
 	echo -e "\n test dir ~$MY_USERNAME"
 } >>"$INSTALL_LOG"
 # *nix
-if
-	export HOMEDIR="/home/$MY_USERNAME"
-fi
+export HOMEDIR="/home/$MY_USERNAME"
 if [ -f "$HOMEDIR/.ssh/id_rsa" ]; then
 	echo_warning "'SSH key already exists, will not generate new ones'"
 elif [ -d "$HOMEDIR" ]; then

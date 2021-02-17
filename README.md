@@ -3,8 +3,6 @@
 Bash Script to automate post-installation steps.
 Helps to install packages on REDHAT based operating systems.
 
-![Red Hat](img/redhat.png)
-
 ## Overview
 
 `postinstall.sh` is simple bash shell script which in turn generates scripts.
@@ -32,7 +30,6 @@ bash postinstall.sh -b install
 ```
 
 ## Usage
-
 ```
 Usage: postinstall.sh [-t <TYPE>] [-b <BASE>] [-h]:
         [-t <TYPE>]      sets the type of installation (default: server)
@@ -59,4 +56,3 @@ Only `bash`, `curl`, `tput` (`ncurses-utils`) and a package manager for the resp
 ## License
 
 GNU Public License version 3.
-Please feel free to fork and modify this on GitHub (https://github.com/Cyclenerd/postinstall).

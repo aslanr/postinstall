@@ -200,30 +200,10 @@ function check_if_root_or_die() {
 	echo_step "Checking installation privileges"
 	echo -e "\nid -u" >>"$INSTALL_LOG"
 	SCRIPT_UID=$(id -u)
-	if [ "$OPERATING_SYSTEM" = "CYGWIN" ]; then
-		# Administrator really isn't equivalent to POSIX root.
-		echo_step_info "Cygwin, no need for root"
-	elif [ "$OPERATING_SYSTEM" = "TERMUX" ]; then
-		# Termux does nor supply tools for rooting.
-		echo_step_info "Termux, no need for root"
-	elif [ "$OPERATING_SYSTEM" = "HAIKU" ]; then
-		# Haiku is a single-user system
-		echo_step_info "Haiku, no need for root"
-	elif [ "$SCRIPT_UID" != 0 ]; then
+	if [ "$SCRIPT_UID" != 0 ]; then
 		exit_with_failure "$ME should be run as root"
 	fi
 	echo_success
-}
-
-# check_travis() check travis (https://travis-ci.org/Cyclenerd/postinstall) environment
-function check_travis() {
-	if [ -n "$TRAVIS" ]; then
-		MY_HOMEBREW_USER="travis"
-		export MY_HOMEBREW_USER
-		echo "!!! Travis CI detected. Behavior is somewhat different !!!" >>"$INSTALL_LOG"
-		echo_step "Travis CI detected. Behavior is somewhat different!"
-		echo_success
-	fi
 }
 
 # check_bash() check if current shell is bash
@@ -263,19 +243,17 @@ function detect_architecture() {
 	echo_success
 }
 
-# detect_operating_system() obtains the operating system and exits if it's not
-# one of: Debian, Ubuntu, Fedora, RedHat, CentOS, SuSE, macOS, FreeBSD or Cycwin
+# detect_operating_system() obtains the operating system and exits.
 function detect_operating_system() {
 	echo_step "Detecting operating system"
 	echo -e "\nuname" >>"$INSTALL_LOG"
 	# https://en.wikipedia.org/wiki/Uname
 	# Within the bash shell, the environment variable OSTYPE contains a value similar (but not identical) to the value of uname (-o)
-	# macOS = uname -o: illegal option -- o
 	OPERATING_SYSTEM_TYPE=$(uname)
 	export OPERATING_SYSTEM_TYPE
 	if [ -f /etc/redhat-release ] || [ -f /etc/system-release-cpe ]; then
 		echo -e "\ntest -f /etc/redhat-release || test -f /etc/system-release-cpe" >>"$INSTALL_LOG"
-		echo_step_info "Red Hat / Fedora / CentOS"
+		echo_step_info "Red Hat / CentOS Stream"
 		OPERATING_SYSTEM="REDHAT"
 	else
 		{
@@ -293,13 +271,10 @@ function detect_installer() {
 	echo_step "  Checking installation tools"
 	case $OPERATING_SYSTEM in
 		REDHAT)
-			# https://fedoraproject.org/wiki/Dnf
 			if command_exists dnf; then
 				echo -e "\ndnf found" >>"$INSTALL_LOG"
 				export MY_INSTALLER="dnf"
 				export MY_INSTALL="-y install"
-			# https://fedoraproject.org/wiki/Yum
-			# As of Fedora 22, yum has been replaced with dnf.
 			elif command_exists yum; then
 				echo -e "\nyum found" >>"$INSTALL_LOG"
 				export MY_INSTALLER="yum"
@@ -471,7 +446,6 @@ detect_hostname_fqdn
 detect_operating_system
 detect_architecture
 check_if_root_or_die
-check_travis
 
 echo_step "Preparing to Install"; echo
 
@@ -479,7 +453,7 @@ echo_step "Preparing to Install"; echo
 detect_installer
 
 # Re-sync package index
-resync_installer
+# resync_installer
 
 # Checking if curl is installed
 #  If not try to install curl
@@ -524,19 +498,6 @@ build_script "${PACKAGE_SOURCES[@]}" "$PACKAGES_LIST"
 
 echo_title "Install"
 
-# macOS: Install the latest command line tools from XCode.
-if command_exists xcode-select; then
-	echo_step "Install the latest command line tools from XCode"
-	xcode-select --install >>"$INSTALL_LOG" 2>&1
-	# 0 = OK
-	# 1 = command line tools are already installed
-	if [ "$?" -gt 1 ]; then
-		echo_warning "Failed to do xcode-select --install, will attempt to continue"
-	else
-		echo_success
-	fi
-fi
-
 # Run BEFORE_SCRIPT
 echo_step "Running BEFORE script"; echo
 if [ -f "$BEFORE_SCRIPT" ]; then
@@ -559,14 +520,6 @@ if [ -f "$PACKAGES_LIST" ]; then
 		if [[ "$PACKAGE" == [a-z]* ]] || [[ "$PACKAGE" == [A-Z]* ]]; then
 			echo_step "  $PACKAGE"
 			echo -e "\n$MY_INSTALLER $INSTALL $PACKAGE" >>"$INSTALL_LOG"
-			if [[ $MY_INSTALLER == "brew" ]]; then
-				$MY_INSTALLER $MY_INSTALL "$PACKAGE" | sudo tee -a "$INSTALL_LOG" 2>&1
-			elif [[ $MY_INSTALLER == "slackpkg" ]]; then
-				# not silent
-				$MY_INSTALLER $MY_INSTALL "$PACKAGE"
-			else
-				$MY_INSTALLER $MY_INSTALL "$PACKAGE" >>"$INSTALL_LOG" 2>&1
-			fi
 			if [ "$?" -ne 0 ]; then
 				echo_warning "Failed to install, will attempt to continue"
 			else

@@ -1,0 +1,7 @@
+#
+# packages.list for REDHAT and all TYPEs
+#
+# One package per line
+net-tools
+screen
+nano
